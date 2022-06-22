@@ -85,13 +85,51 @@ function RandomUsernames() {
   )
 }
 
+
+
+
+function DisplayRandomUsers() {
+  const [peoples, setPeoples] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // Executed once when component is mounted (StrictMode desactivated in index.js)
+  useEffect(() => {
+    fetchRandomUsers()
+  }, [])
+
+  // Async instead of normal fetch
+  const fetchRandomUsers = async () => {
+    try {
+      let response = await fetch('https://randomuser.me/api?results=200')
+      let data = await response.json()
+      setPeoples(data.results)
+      setLoading(false)
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  return (
+    // If loading, display a loading message instead display the list of people
+    loading > 0
+      ? <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+      : peoples && peoples.map(people => (
+        <div key={people.name}>
+          <img src={people.picture.medium} alt={people.name} />
+          <p>{people.name.first} {people.name.last}</p>
+        </div>
+      ))
+  )
+}
+
 function App() {
   return (
     <div className="App">
       {
         //ListFontAwesome()
         //MyForm()
-        RandomUsernames()
+        //RandomUsernames()
+        DisplayRandomUsers()
       }
      </div>
 
