@@ -55,13 +55,43 @@ function MyForm() {
   )
 }
 
+function RandomUsernames() {
+  const [isClicked, setIsClicked] = useState(false)
+  const [users, setUsers] = useState([])
+
+  const handleClick = async event => {
+    setIsClicked(true)
+    let response = await fetch("https://jsonplaceholder.typicode.com/users")
+    let users = await response.json()
+    setUsers(users)
+  }
+
+  return (
+    <>
+      <button onClick={handleClick}>Fetch Users</button>
+      {
+        //DisplayRandomUsers()
+        isClicked && (
+          users.length > 0 && (
+            <ul>
+              {users.map(user => (
+                <li key={user.id}>{user.name}</li>
+              ))}
+            </ul>
+          )
+        )
+      }
+    </>
+  )
+}
+
 function App() {
   return (
     <div className="App">
       {
         //ListFontAwesome()
-        MyForm()
-
+        //MyForm()
+        RandomUsernames()
       }
      </div>
 
